@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 		/* дочерний процесс */
 		printf("%s: ", argv[0]);
 		printf("child process id: %08X\n", getpid());
-		const char* executable = "./prog_1";
+		const char* executable = "./prog1";
 		execle(executable, executable, "qwe", "asd", "zxc", NULL, NULL);
 		return 13;
 	}
@@ -42,12 +42,12 @@ int main(int argc, char *argv[])
 	if (WIFSIGNALED(child_retval))
 	{
 		printf("%s: ", argv[0]);
-		printf("child process was terminated by a signal %d\n", WTERMSIG(child_retval));
+		printf("child process was terminated by a signal %d.\n", WTERMSIG(child_retval));
 	}
 	else if (WIFEXITED(child_retval))
 	{
 		printf("%s: ", argv[0]);
-		printf("child process exit code: %d\n", WEXITSTATUS(child_retval));
+		printf("child process terminated normally with code %d.\n", WEXITSTATUS(child_retval));
 	}
 	
 	return 0;
