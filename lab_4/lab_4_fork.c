@@ -28,7 +28,7 @@ int main()
 		printf("child: %#010X\n", getpid());
 		struct timespec t = { .tv_sec = 2 };
 		nanosleep(&t, NULL);
-		exit(0);
+		return 0;
 	}
 	do
 	{
@@ -36,6 +36,14 @@ int main()
 		printf("wait\n");
 
 	} while (waitpid(pid, &child_retval, WNOHANG) != pid);
-	printf("ok\n");
+	if (WIFSIGNALED(child_retval))
+	{
+		printf("child process was terminated by a signal %d\n", WTERMSIG(child_retval));
+	}
+	else if (WIFEXITED(child_retval))
+	{
+		printf("child process exit code: %d\n", WEXITSTATUS(child_retval));
+	}
+	
 	return 0;
 }
