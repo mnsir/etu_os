@@ -5,14 +5,19 @@
 
 int main(int argc, char *argv[])
 {
-	pid_t id = getpid();
-	pid_t parent_id = getppid();
-	printf("this proc id: %#010X, parent proc id: %#010X\n", id, parent_id);
+	printf("%s: ", argv[0]);
+	if (argc < 2)
+	{
+		printf("no arguments to print\n");
+		return 1;
+	}
+	printf("process id: %08X, parent process id: %08X\n", getpid(), getppid());
 	struct timespec ts = { .tv_sec = 2 };
 	for (int i = 1; i < argc; ++i)
 	{
 		nanosleep(&ts, NULL);
-		printf("arg %d: %s\n", i, argv[i]);
+		printf("%s: ", argv[0]);
+		printf("argument %d is %s\n", i, argv[i]);
 	}
 	return 0;
 }

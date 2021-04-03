@@ -8,12 +8,13 @@
 
 extern int errno;
 
-int main()
+int main(int argc, char *argv[])
 {
 	int child_retval;
 	struct timespec ts = { .tv_nsec = 500 * 1000000 };
 	
-	printf("me: %#010X, parent: %#010X\n", getpid(), getppid());
+	printf("%s: ", argv[0]);
+	printf("process id: %08X, parent process id: %08X\n", getpid(), getppid());
 	
 	pid_t pid = fork();
 	/* если внезапно ошибка */
@@ -25,22 +26,27 @@ int main()
 	if (pid == 0)
 	{
 		/* дочерний процесс */
-		printf("child: %#010X\n", getpid());
-		execle("prog_1", "prog_1", "qwe", "asd", "zxc", NULL, NULL);
+		printf("%s: ", argv[0]);
+		printf("child process id: %08X\n", getpid());
+		const char* executable = "./prog_1";
+		execle(executable, executable, "qwe", "asd", "zxc", NULL, NULL);
 		return 13;
 	}
 	do
 	{
 		nanosleep(&ts, NULL);
-		printf("wait\n");
+		printf("%s: ", argv[0]);
+		printf("child process still works\n");
 
 	} while (waitpid(pid, &child_retval, WNOHANG) != pid);
 	if (WIFSIGNALED(child_retval))
 	{
+		printf("%s: ", argv[0]);
 		printf("child process was terminated by a signal %d\n", WTERMSIG(child_retval));
 	}
 	else if (WIFEXITED(child_retval))
 	{
+		printf("%s: ", argv[0]);
 		printf("child process exit code: %d\n", WEXITSTATUS(child_retval));
 	}
 	
