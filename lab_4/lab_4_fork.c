@@ -26,9 +26,8 @@ int main()
 	{
 		/* дочерний процесс */
 		printf("child: %#010X\n", getpid());
-		struct timespec t = { .tv_sec = 2 };
-		nanosleep(&t, NULL);
-		return 0;
+		execle("prog_1", "prog_1", "qwe", "asd", "zxc", NULL, NULL);
+		return 13;
 	}
 	do
 	{
