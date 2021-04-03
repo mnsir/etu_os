@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <errno.h>
 
 #include "sleep.h"
 
 #define EXEC "./prog1"
-
-extern int errno;
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +21,8 @@ int main(int argc, char *argv[])
 	{
 	case -1:
 		/* TODO обработать */
+		printf("%s: ", argv[0]);
+                printf("fork error\n");
 		return 1;
 	case 0:
 		/* дочерний процесс */
