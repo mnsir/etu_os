@@ -6,12 +6,13 @@
 #include <sys/wait.h>
 #include <errno.h>
 
+#include "sleep.h"
+
 extern int errno;
 
 int main(int argc, char *argv[])
 {
 	int child_retval;
-	struct timespec ts = { .tv_nsec = 500 * 1000000 };
 	
 	printf("%s: ", argv[0]);
 	printf("process id: %08X, parent process id: %08X\n", getpid(), getppid());
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
 	}
 	do
 	{
-		nanosleep(&ts, NULL);
+		sleep_ms(500);
 		printf("%s: ", argv[0]);
 		printf("child process still works\n");
 

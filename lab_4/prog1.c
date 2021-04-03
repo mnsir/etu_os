@@ -1,7 +1,8 @@
 #include <stdio.h>
-#include <time.h>
 #include <unistd.h>
 #include <sys/types.h>
+
+#include "sleep.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,10 +13,9 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	printf("process id: %08X, parent process id: %08X\n", getpid(), getppid());
-	struct timespec ts = { .tv_sec = 2 };
 	for (int i = 1; i < argc; ++i)
 	{
-		nanosleep(&ts, NULL);
+		sleep_ms(2000);
 		printf("%s: ", argv[0]);
 		printf("argument %d is %s\n", i, argv[i]);
 	}
