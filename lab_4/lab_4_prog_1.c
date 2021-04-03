@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
 	pid_t id = getpid();
 	pid_t parent_id = getppid();
-	printf("this proc id: %X, parent proc id: %X\n", id, parent_id);
+	printf("this proc id: %#010X, parent proc id: %#010X\n", id, parent_id);
 	struct timespec ts = { .tv_sec = 2 };
 	for (int i = 1; i < argc; ++i)
 	{
