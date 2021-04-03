@@ -13,6 +13,8 @@ int main()
 	int child_retval;
 	struct timespec ts = { .tv_nsec = 500 * 1000000 };
 	
+	printf("me: %X, parent: %X\n", getpid(), getppid());
+	
 	pid_t pid = fork();
 	/* если внезапно ошибка */
 	if (pid < 0)
@@ -23,6 +25,7 @@ int main()
 	if (pid == 0)
 	{
 		/* дочерний процесс */
+		printf("child: %X\n", getpid());
 		struct timespec t = { .tv_sec = 2 };
 		nanosleep(&t, NULL);
 		exit(0);
