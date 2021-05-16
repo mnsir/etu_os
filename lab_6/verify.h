@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+
 #ifndef FAILED_ONLY
 #define PRINT_SUCSEEDED(expr) fprintf(stderr, "SUCSEEDED: " expr "\n")
 #else
