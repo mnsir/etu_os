@@ -1,8 +1,9 @@
 # Ignore all
 *
 
-# Unignore all with extensions
-!*.*
+# Unignore some with extensions
+!*.c
+!*.h
 
 # Unignore all lab dirs
 !lab_*/
