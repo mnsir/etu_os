@@ -1,19 +1,24 @@
+#include <sys/types.h> /* ftok */
+#include <sys/ipc.h>   /* ftok msgget msgctl */
+#include <sys/msg.h>   /* msgget msgctl */
+#include <time.h>
 #include <pthread.h>
 #define ENABLE_COLORED_RESULT
 #include "verify.h"
+#include "common.h"
 
 int FLAG; /* объявить флаг завершения потока */
-/* объявить идентификатор очереди сообщений */
+int ID;   /* объявить идентификатор очереди сообщений */
 
 /* Функция потока */
 void *func(void *args)
 {
-    /* объявить буфер */
+    msg_t msg = {.type = 1};  /* объявить буфер */
     while (FLAG != 1) /* пока (флаг завершения потока не установлен) */
     {
-        /* сформировать сообщение в буфере */
-        /* записать сообщение из буфера в очередь сообщений */
-        struct timespec ts = {.tv_nsec = 200 * 1000000}; /* задержать на время */
+        strcpy(msg.text, "foo");                 /* сформировать сообщение в буфере */
+        msgsnd(ID, &msg, sizeof msg.text, IPC_NOWAIT); /* записать сообщение из буфера в очередь сообщений */
+        struct timespec ts = {.tv_nsec = 200 * 1000000};  /* задержать на время */
         nanosleep(&ts, NULL);
     }
 }
@@ -22,7 +27,8 @@ void *func(void *args)
 int main()
 {
     pthread_t th; /* объявить идентификатор потока */
-                  /* создать (или открыть, если существует) очередь сообщений */
+    ID = msgget(KEY, IPC_CREAT|0644); /* создать (или открыть, если существует) очередь сообщений */
+    VERIFY(ID != -1);
 
     VERIFY(pthread_create(&th, NULL, &func, NULL) == 0); /* создать поток из функции потока */
     getchar();                                           /* ждать нажатия клавиши */
@@ -30,5 +36,5 @@ int main()
     VERIFY(pthread_join(th, NULL) == 0);                 /* ждать завершения потока */
 
     /* закрыть очередь сообщений */
-    /* удалить очередь сообщений */
+    VERIFY(msgctl(ID, IPC_RMID, NULL) == 0); /* удалить очередь сообщений */
 }
